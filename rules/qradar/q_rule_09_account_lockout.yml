@@ -1,0 +1,6 @@
+﻿id: "QR-009"
+name: "Repeated Account Lockouts from Single Source"
+description: "Detects spraying or brute force causing account lockouts"
+severity: "medium"
+aql_query: >
+  SELECT TargetUserName, sourceip, COUNT(*) as lock_count FROM events WHERE eventid = 4740 GROUP BY TargetUserName, sourceip HAVING lock_count > 5

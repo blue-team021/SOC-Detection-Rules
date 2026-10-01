@@ -1,0 +1,6 @@
+﻿id: "QR-001"
+name: "Multiple Failed Logins Followed by Success"
+description: "Detects potential credential stuffing or brute force attack"
+severity: "high"
+aql_query: >
+  SELECT sourceip, username, COUNT(*) as fail_count FROM events WHERE eventname LIKE "%Failed Login%" GROUP BY sourceip, username HAVING fail_count > 10

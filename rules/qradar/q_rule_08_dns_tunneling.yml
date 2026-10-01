@@ -1,0 +1,6 @@
+﻿id: "QR-008"
+name: "Potential DNS Tunneling Activity"
+description: "Detects unusually long DNS query strings indicating data exfiltration"
+severity: "high"
+aql_query: >
+  SELECT sourceip, UTF8(Payload) FROM events WHERE qname_length > 50 AND eventname LIKE "%DNS Query%"

@@ -1,0 +1,6 @@
+﻿id: "QR-005"
+name: "Suspicious Windows Service Installation"
+description: "Detects installation of a new Windows service from unknown binaries"
+severity: "high"
+aql_query: >
+  SELECT ComputerName, Username, UTF8(Payload) FROM events WHERE eventid = 7045

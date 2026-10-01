@@ -1,0 +1,6 @@
+﻿id: "QR-003"
+name: "Unusual Outbound Network Traffic Volume"
+description: "Detects potential data exfiltration over non-standard ports"
+severity: "high"
+aql_query: >
+  SELECT sourceip, destinationip, SUM(sourcebytes) as total_out FROM flows WHERE destinationport NOT IN (80, 443) GROUP BY sourceip, destinationip HAVING total_out > 104857600

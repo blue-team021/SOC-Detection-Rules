@@ -1,0 +1,6 @@
+﻿id: "QR-002"
+name: "User Added to Privileged Group"
+description: "Detects account escalation via local/domain administrators group modification"
+severity: "critical"
+aql_query: >
+  SELECT username, TargetUserName, sourceip FROM events WHERE eventid = 4728 OR eventid = 4732 OR eventid = 4756

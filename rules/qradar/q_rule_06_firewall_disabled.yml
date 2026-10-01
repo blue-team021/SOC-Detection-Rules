@@ -1,0 +1,6 @@
+﻿id: "QR-006"
+name: "Host Firewall Disabled"
+description: "Detects security software tampering or firewall state change"
+severity: "critical"
+aql_query: >
+  SELECT ComputerName, Username FROM events WHERE eventname LIKE "%Firewall Disabled%" OR eventid = 2004

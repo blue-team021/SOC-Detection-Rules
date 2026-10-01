@@ -1,0 +1,6 @@
+﻿id: "QR-010"
+name: "Potential Lateral Movement via PsExec or WMI"
+description: "Detects administrative administrative tool usage across network"
+severity: "high"
+aql_query: >
+  SELECT sourceip, destinationip, username FROM events WHERE eventname LIKE "%psexec%" OR eventname LIKE "%wmic%"

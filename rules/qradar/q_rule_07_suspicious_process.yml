@@ -1,0 +1,6 @@
+﻿id: "QR-007"
+name: "Execution of Known Lolbins from Temp Directory"
+description: "Detects execution of system binaries from user temp paths"
+severity: "high"
+aql_query: >
+  SELECT ComputerName, Username, CommandLine FROM events WHERE eventid = 1 AND (CommandLine LIKE "%\\Temp\\%" OR CommandLine LIKE "%\\AppData\\%")
