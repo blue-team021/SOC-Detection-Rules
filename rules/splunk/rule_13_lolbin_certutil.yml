@@ -1,0 +1,7 @@
+﻿id: "SPL-013"
+name: "MITRE ATT&CK - Certutil File Download (LOLBIN)"
+description: "Detects certutil.exe used to download remote payload"
+severity: "high"
+cron_schedule: "*/5 * * * *"
+search: >
+  index=windows EventCode=1 Image="*\\certutil.exe" (CommandLine="*-urlcache*" OR CommandLine="*-f*") | stats count by _time, Computer, User, CommandLine

@@ -1,0 +1,7 @@
+﻿id: "SPL-008"
+name: "MITRE ATT&CK - Security Event Log Cleared"
+description: "Detects attempts to wipe Windows Security Logs"
+severity: "high"
+cron_schedule: "*/5 * * * *"
+search: >
+  index=windows EventCode=1102 | stats count by _time, Computer, AccountName

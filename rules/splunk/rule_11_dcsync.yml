@@ -1,0 +1,7 @@
+﻿id: "SPL-011"
+name: "MITRE ATT&CK - DCSync Active Directory Replication"
+description: "Detects Directory Service replication requests from non-DC accounts"
+severity: "critical"
+cron_schedule: "*/5 * * * *"
+search: >
+  index=windows EventCode=4662 Properties="*1131f6aa-9c0e-11d1-a79f-0000f875ae93*" | stats count by _time, SubjectUserName, Computer

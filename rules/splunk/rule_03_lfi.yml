@@ -1,0 +1,7 @@
+﻿id: "SPL-003"
+name: "OWASP - Local File Inclusion / Path Traversal"
+description: "Detects attempts to access sensitive system files like /etc/passwd"
+severity: "high"
+cron_schedule: "*/5 * * * *"
+search: >
+  index=web_docker_logs (uri="*../*" OR uri="*..%2F*" OR uri="*etc/passwd*" OR uri="*win.ini*") | stats count by src_ip, uri, status | where count > 0

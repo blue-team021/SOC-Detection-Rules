@@ -1,0 +1,7 @@
+﻿id: "SPL-004"
+name: "OWASP - Command Injection Attempt"
+description: "Detects OS command execution characters in web requests"
+severity: "critical"
+cron_schedule: "*/5 * * * *"
+search: >
+  index=web_docker_logs (uri="*;*" OR uri="*%7C*" OR uri="*&&*" OR uri="*whoami*" OR uri="*nc%20*") | stats count by src_ip, uri, status | where count > 0

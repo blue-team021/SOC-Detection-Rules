@@ -1,0 +1,7 @@
+﻿id: "SPL-007"
+name: "MITRE ATT&CK - Encoded PowerShell Execution"
+description: "Detects execution of Base64 encoded PowerShell commands"
+severity: "high"
+cron_schedule: "*/5 * * * *"
+search: >
+  index=windows EventCode=4688 OR EventCode=1 Image="*\\powershell.exe" (CommandLine="*-enc*" OR CommandLine="*-EncodedCommand*") | stats count by _time, Computer, User, CommandLine

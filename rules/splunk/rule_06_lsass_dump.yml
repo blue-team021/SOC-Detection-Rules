@@ -1,0 +1,7 @@
+﻿id: "SPL-006"
+name: "MITRE ATT&CK - LSASS Process Memory Dump"
+description: "Detects credential dumping attempts targeting lsass.exe via Sysmon"
+severity: "critical"
+cron_schedule: "*/5 * * * *"
+search: >
+  index=windows EventCode=10 TargetImage="*\\lsass.exe" (GrantedAccess="0x1010" OR GrantedAccess="0x1410") | stats count by _time, Computer, SourceImage, TargetImage

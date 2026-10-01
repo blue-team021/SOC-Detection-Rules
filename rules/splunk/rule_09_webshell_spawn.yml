@@ -1,0 +1,7 @@
+﻿id: "SPL-009"
+name: "MITRE ATT&CK - Web Server Spawning Shell"
+description: "Detects cmd.exe or bash processes spawned by IIS or Nginx"
+severity: "critical"
+cron_schedule: "*/5 * * * *"
+search: >
+  index=windows EventCode=1 ParentImage="*\\w3wp.exe" OR ParentImage="*\\httpd.exe" (Image="*\\cmd.exe" OR Image="*\\powershell.exe") | stats count by _time, Computer, ParentImage, Image

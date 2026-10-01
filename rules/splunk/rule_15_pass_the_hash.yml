@@ -1,0 +1,7 @@
+﻿id: "SPL-015"
+name: "MITRE ATT&CK - Pass-the-Hash (Explicit Credentials)"
+description: "Detects Logon Type 9 (NewCredentials) indicating Pass-the-Hash attack"
+severity: "high"
+cron_schedule: "*/5 * * * *"
+search: >
+  index=windows EventCode=4624 LogonType=9 ProcessName="*\\lsass.exe" | stats count by _time, Computer, TargetUserName, IpAddress
