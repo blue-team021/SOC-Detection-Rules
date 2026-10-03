@@ -1,6 +1,15 @@
-﻿id: "QR-006"
+id: "QR-006"
 name: "Host Firewall Disabled"
-description: "Detects security software tampering or firewall state change"
+description: "Detects Windows Firewall stopped or disabled"
+description_az: "Windows Firewall-un dayandirilmasini ve ya sondurulmesini (Event 5025, 4950) askar edir. Hucumcu mudafie vasitelerini zeiflede bilir. Oncelik: kritik."
 severity: "critical"
+mitre: "T1562.004"
+type: "events"
+rule_type: "EVENT"
+rule_filter: "eventid = 5025 OR eventid = 4950"
+threshold_count: "0"
+threshold_fields: ""
+threshold_minutes: "0"
+qradar_severity: "9"
 aql_query: >
-  SELECT ComputerName, Username FROM events WHERE eventname LIKE "%Firewall Disabled%" OR eventid = 2004
+  SELECT LOGSOURCENAME(logsourceid) AS logsource, username, UTF8(payload) AS raw_event FROM events WHERE eventid IN (5025, 4950) OR QIDNAME(qid) ILIKE '%firewall%disabled%' LAST 5 MINUTES

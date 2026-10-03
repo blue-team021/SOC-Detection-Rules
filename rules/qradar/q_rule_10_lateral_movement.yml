@@ -1,6 +1,15 @@
-﻿id: "QR-010"
+id: "QR-010"
 name: "Potential Lateral Movement via PsExec or WMI"
-description: "Detects administrative administrative tool usage across network"
+description: "Detects PsExec or WMIC usage across the network"
+description_az: "Sebeke uzre PsExec ve ya WMIC istifadesini (PSEXESVC servisi, wmic emri) askar edir. Hucumcunun bir cihazdan digerine kecmesi (lateral movement) isaresidir. Oncelik: yuksek."
 severity: "high"
+mitre: "T1021.002"
+type: "events"
+rule_type: "EVENT"
+rule_filter: "UTF8(payload) ILIKE '%psexesvc%' OR UTF8(payload) ILIKE '%psexec%' OR UTF8(payload) ILIKE '%wmic%'"
+threshold_count: "0"
+threshold_fields: ""
+threshold_minutes: "0"
+qradar_severity: "7"
 aql_query: >
-  SELECT sourceip, destinationip, username FROM events WHERE eventname LIKE "%psexec%" OR eventname LIKE "%wmic%"
+  SELECT sourceip, destinationip, username, UTF8(payload) AS raw_event FROM events WHERE UTF8(payload) ILIKE '%psexesvc%' OR UTF8(payload) ILIKE '%psexec%' OR UTF8(payload) ILIKE '%wmic%' LAST 15 MINUTES

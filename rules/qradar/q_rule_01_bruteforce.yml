@@ -1,6 +1,15 @@
-﻿id: "QR-001"
-name: "Multiple Failed Logins Followed by Success"
-description: "Detects potential credential stuffing or brute force attack"
+id: "QR-001"
+name: "Multiple Failed Logins (Brute Force)"
+description: "Detects more than 10 failed logins from one source IP and user within 5 minutes"
+description_az: "Bir IP unvanindan bir istifadeci ucun 5 deqiqe erzinde 10-dan cox ugursuz giris (Event 4625) askar edir. Brute force ve ya credential stuffing hucumu isaresidir. Oncelik: yuksek."
 severity: "high"
+mitre: "T1110"
+type: "events"
+rule_type: "EVENT"
+rule_filter: "eventid = 4625"
+threshold_count: "10"
+threshold_fields: "sourceIP, userName"
+threshold_minutes: "5"
+qradar_severity: "7"
 aql_query: >
-  SELECT sourceip, username, COUNT(*) as fail_count FROM events WHERE eventname LIKE "%Failed Login%" GROUP BY sourceip, username HAVING fail_count > 10
+  SELECT sourceip, username, COUNT(*) AS fail_count FROM events WHERE eventid = 4625 OR QIDNAME(qid) ILIKE '%failed login%' GROUP BY sourceip, username HAVING COUNT(*) > 10 LAST 5 MINUTES

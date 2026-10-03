@@ -1,6 +1,15 @@
-﻿id: "QR-002"
+id: "QR-002"
 name: "User Added to Privileged Group"
 description: "Detects account escalation via local/domain administrators group modification"
+description_az: "Istifadecinin lokal ve ya domen administrator qrupuna elave edilmesini (Event 4728, 4732, 4756) askar edir. Huquq yukseltme (privilege escalation) isaresidir. Oncelik: kritik."
 severity: "critical"
+mitre: "T1098"
+type: "events"
+rule_type: "EVENT"
+rule_filter: "eventid = 4728 OR eventid = 4732 OR eventid = 4756"
+threshold_count: "0"
+threshold_fields: ""
+threshold_minutes: "0"
+qradar_severity: "9"
 aql_query: >
-  SELECT username, TargetUserName, sourceip FROM events WHERE eventid = 4728 OR eventid = 4732 OR eventid = 4756
+  SELECT username, sourceip, LOGSOURCENAME(logsourceid) AS logsource, UTF8(payload) AS raw_event FROM events WHERE eventid IN (4728, 4732, 4756) LAST 5 MINUTES

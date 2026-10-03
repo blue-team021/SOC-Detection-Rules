@@ -1,6 +1,15 @@
-﻿id: "QR-003"
+id: "QR-003"
 name: "Unusual Outbound Network Traffic Volume"
-description: "Detects potential data exfiltration over non-standard ports"
+description: "Detects more than 100 MB sent to one destination over non-standard ports in 15 minutes"
+description_az: "Standart olmayan portlar uzerinden bir hedefe 15 deqiqede 100 MB-dan cox melumat gonderilmesini askar edir. Melumat sizmasi (data exfiltration) isaresidir. Flow collector teleb edir. Oncelik: yuksek."
 severity: "high"
+mitre: "T1048"
+type: "flows"
+rule_type: "FLOW"
+rule_filter: "destinationport != 80 AND destinationport != 443 AND sourcebytes > 10485760"
+threshold_count: "10"
+threshold_fields: "sourceIP, destinationIP"
+threshold_minutes: "15"
+qradar_severity: "7"
 aql_query: >
-  SELECT sourceip, destinationip, SUM(sourcebytes) as total_out FROM flows WHERE destinationport NOT IN (80, 443) GROUP BY sourceip, destinationip HAVING total_out > 104857600
+  SELECT sourceip, destinationip, SUM(sourcebytes) AS total_out FROM flows WHERE destinationport NOT IN (80, 443) GROUP BY sourceip, destinationip HAVING SUM(sourcebytes) > 104857600 LAST 15 MINUTES

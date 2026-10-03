@@ -1,6 +1,15 @@
-﻿id: "QR-008"
+id: "QR-008"
 name: "Potential DNS Tunneling Activity"
-description: "Detects unusually long DNS query strings indicating data exfiltration"
+description: "Detects unusually long DNS events (over 200 characters)"
+description_az: "Qeyri-adi uzun DNS sorgularini (200 simvoldan cox) askar edir. DNS tunelleme ile melumat sizmasi ve ya C2 isaresidir. DNS log menbeyi teleb edir. Oncelik: yuksek."
 severity: "high"
+mitre: "T1071.004"
+type: "events"
+rule_type: "EVENT"
+rule_filter: "QIDNAME(qid) ILIKE '%dns%' AND STRLEN(UTF8(payload)) > 200"
+threshold_count: "0"
+threshold_fields: ""
+threshold_minutes: "0"
+qradar_severity: "7"
 aql_query: >
-  SELECT sourceip, UTF8(Payload) FROM events WHERE qname_length > 50 AND eventname LIKE "%DNS Query%"
+  SELECT sourceip, STRLEN(UTF8(payload)) AS payload_len, UTF8(payload) AS raw_event FROM events WHERE QIDNAME(qid) ILIKE '%dns%' AND STRLEN(UTF8(payload)) > 200 LAST 5 MINUTES

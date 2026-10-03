@@ -1,6 +1,15 @@
-﻿id: "QR-005"
+id: "QR-005"
 name: "Suspicious Windows Service Installation"
-description: "Detects installation of a new Windows service from unknown binaries"
+description: "Detects installation of a new Windows service (Event 7045)"
+description_az: "Windows-da yeni servisin qurasdirilmasini (Event 7045) askar edir. Hucumcu bununla sistemde qalici olur ve ya PsExec isledir. Oncelik: yuksek."
 severity: "high"
+mitre: "T1543.003"
+type: "events"
+rule_type: "EVENT"
+rule_filter: "eventid = 7045"
+threshold_count: "0"
+threshold_fields: ""
+threshold_minutes: "0"
+qradar_severity: "7"
 aql_query: >
-  SELECT ComputerName, Username, UTF8(Payload) FROM events WHERE eventid = 7045
+  SELECT LOGSOURCENAME(logsourceid) AS logsource, username, UTF8(payload) AS raw_event FROM events WHERE eventid = 7045 LAST 5 MINUTES

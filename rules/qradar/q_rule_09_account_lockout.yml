@@ -1,6 +1,15 @@
-﻿id: "QR-009"
+id: "QR-009"
 name: "Repeated Account Lockouts from Single Source"
-description: "Detects spraying or brute force causing account lockouts"
+description: "Detects more than 5 account lockouts (Event 4740) from one source in 15 minutes"
+description_az: "Bir menbeden 15 deqiqe erzinde 5-den cox hesab bloklanmasini (Event 4740) askar edir. Password spraying ve ya brute force isaresidir. Oncelik: orta."
 severity: "medium"
+mitre: "T1110.003"
+type: "events"
+rule_type: "EVENT"
+rule_filter: "eventid = 4740"
+threshold_count: "5"
+threshold_fields: "sourceIP, userName"
+threshold_minutes: "15"
+qradar_severity: "5"
 aql_query: >
-  SELECT TargetUserName, sourceip, COUNT(*) as lock_count FROM events WHERE eventid = 4740 GROUP BY TargetUserName, sourceip HAVING lock_count > 5
+  SELECT username, sourceip, COUNT(*) AS lock_count FROM events WHERE eventid = 4740 GROUP BY username, sourceip HAVING COUNT(*) > 5 LAST 15 MINUTES

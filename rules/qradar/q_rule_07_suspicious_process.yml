@@ -1,6 +1,15 @@
-﻿id: "QR-007"
-name: "Execution of Known Lolbins from Temp Directory"
-description: "Detects execution of system binaries from user temp paths"
+id: "QR-007"
+name: "Execution of Known LOLBins from Temp Directory"
+description: "Detects LOLBin execution with Temp/AppData paths (Sysmon Event 1)"
+description_az: "certutil, mshta, regsvr32, rundll32 kimi sistem aletlerinin Temp ve ya AppData yolu ile isledilmesini askar edir (Sysmon Event 1). Sysmon teleb edir. Oncelik: yuksek."
 severity: "high"
+mitre: "T1218"
+type: "events"
+rule_type: "EVENT"
+rule_filter: "eventid = 1 AND (UTF8(payload) ILIKE '%certutil%' OR UTF8(payload) ILIKE '%mshta%' OR UTF8(payload) ILIKE '%regsvr32%' OR UTF8(payload) ILIKE '%rundll32%') AND (UTF8(payload) ILIKE '%temp%' OR UTF8(payload) ILIKE '%appdata%')"
+threshold_count: "0"
+threshold_fields: ""
+threshold_minutes: "0"
+qradar_severity: "7"
 aql_query: >
-  SELECT ComputerName, Username, CommandLine FROM events WHERE eventid = 1 AND (CommandLine LIKE "%\\Temp\\%" OR CommandLine LIKE "%\\AppData\\%")
+  SELECT LOGSOURCENAME(logsourceid) AS logsource, username, UTF8(payload) AS raw_event FROM events WHERE eventid = 1 AND (UTF8(payload) ILIKE '%certutil%' OR UTF8(payload) ILIKE '%mshta%' OR UTF8(payload) ILIKE '%regsvr32%' OR UTF8(payload) ILIKE '%rundll32%') AND (UTF8(payload) ILIKE '%temp%' OR UTF8(payload) ILIKE '%appdata%') LAST 5 MINUTES

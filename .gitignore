@@ -1,3 +1,8 @@
 *.env
 secrets*
 *.cred
+*.pem
+# QRadar content export (contains all QRadar rules) and generated bundles
+qr_export.zip
+*ContentExport*.zip
+build/
