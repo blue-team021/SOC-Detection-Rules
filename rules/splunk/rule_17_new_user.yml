@@ -1,0 +1,12 @@
+id: "SPL-017"
+name: "New User Account Created (Honeytoken Watch)"
+description: "Detects creation of a new domain/local user account (e.g. honeytoken sqladmin)"
+severity: "high"
+mitre: "T1136.001"
+cron_schedule: "*/5 * * * *"
+search: >
+  index=main sourcetype=WinEventLog:Security EventCode=4720
+  | rex field=Message "(?s)Subject:.*?Account Name:\s+(?<created_by>\S+)"
+  | rename SAM_Account_Name as new_user
+  | table _time, host, created_by, new_user
+  | sort - _time

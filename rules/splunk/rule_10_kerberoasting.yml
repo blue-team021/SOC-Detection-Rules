@@ -1,7 +1,9 @@
-﻿id: "SPL-010"
+id: "SPL-010"
 name: "MITRE ATT&CK - Potential Kerberoasting Activity"
-description: "Detects TGS requests with RC4 encryption (0x17)"
+description: "Detects TGS service ticket requests with weak RC4 encryption (0x17)"
 severity: "high"
+mitre: "T1558.003"
 cron_schedule: "*/5 * * * *"
 search: >
-  index=windows EventCode=4769 TicketOptions="0x40810000" TicketEncryptionType="0x17" ServiceName!="*$" | stats count by _time, TargetUserName, ServiceName, IpAddress
+  index=main sourcetype=WinEventLog:Security EventCode=4769 Ticket_Encryption_Type=0x17 Service_Name!="*$"
+  | stats count by _time, Account_Name, Service_Name, Client_Address

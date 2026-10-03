@@ -1,7 +1,9 @@
-﻿id: "SPL-014"
+id: "SPL-014"
 name: "MITRE ATT&CK - Windows Defender Disabled via Registry"
-description: "Detects Registry modifications aiming to disable Windows Defender"
+description: "Detects registry change disabling Windows Defender (requires Sysmon)"
 severity: "critical"
+mitre: "T1562.001"
 cron_schedule: "*/5 * * * *"
 search: >
-  index=windows EventCode=13 TargetObject="*\\DisableAntiSpyware" Details="DWORD (0x00000001)" | stats count by _time, Computer, User
+  index=main sourcetype="WinEventLog:Microsoft-Windows-Sysmon/Operational" EventCode=13 TargetObject="*\\DisableAntiSpyware" Details="DWORD (0x00000001)"
+  | stats count by _time, Computer, Image, TargetObject

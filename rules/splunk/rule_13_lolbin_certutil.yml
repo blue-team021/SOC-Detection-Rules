@@ -1,7 +1,9 @@
-﻿id: "SPL-013"
+id: "SPL-013"
 name: "MITRE ATT&CK - Certutil File Download (LOLBIN)"
-description: "Detects certutil.exe used to download remote payload"
+description: "Detects certutil.exe downloading a remote payload (4688, needs command-line auditing GPO)"
 severity: "high"
+mitre: "T1105"
 cron_schedule: "*/5 * * * *"
 search: >
-  index=windows EventCode=1 Image="*\\certutil.exe" (CommandLine="*-urlcache*" OR CommandLine="*-f*") | stats count by _time, Computer, User, CommandLine
+  index=main sourcetype=WinEventLog:Security EventCode=4688 New_Process_Name="*\\certutil.exe" (Process_Command_Line="*-urlcache*" OR Process_Command_Line="*http*")
+  | stats count by _time, ComputerName, Account_Name, Process_Command_Line

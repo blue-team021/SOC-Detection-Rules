@@ -1,7 +1,10 @@
-﻿id: "SPL-001"
+id: "SPL-001"
 name: "OWASP - SQL Injection (SQLi) Attempt Detected"
-description: "Detects SQL injection patterns in web access logs"
+description: "Detects SQL injection patterns in web API request paths"
 severity: "high"
+mitre: "T1190"
 cron_schedule: "*/5 * * * *"
 search: >
-  index=web_docker_logs (uri="*UNION*" OR uri="*SELECT*" OR uri="*OR*1=1*" OR uri="*%27*" OR uri="*SLEEP(*" OR uri="*--*") | stats count min(_time) as firstTime max(_time) as lastTime by src_ip, uri, status, http_user_agent | where count > 0
+  index=main sourcetype=bestrio:api:json (path="*UNION*" OR path="*SELECT*" OR path="*1=1*" OR path="*%27*" OR path="*--*" OR path="*' OR '*" OR path="*SLEEP(*")
+  | stats count min(_time) as firstTime max(_time) as lastTime by src_ip, path, status, user_agent
+  | where count > 0

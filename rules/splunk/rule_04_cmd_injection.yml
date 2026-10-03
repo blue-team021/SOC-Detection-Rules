@@ -1,7 +1,10 @@
-﻿id: "SPL-004"
+id: "SPL-004"
 name: "OWASP - Command Injection Attempt"
-description: "Detects OS command execution characters in web requests"
+description: "Detects OS command execution characters/keywords in web requests"
 severity: "critical"
+mitre: "T1059"
 cron_schedule: "*/5 * * * *"
 search: >
-  index=web_docker_logs (uri="*;*" OR uri="*%7C*" OR uri="*&&*" OR uri="*whoami*" OR uri="*nc%20*") | stats count by src_ip, uri, status | where count > 0
+  index=main sourcetype=bestrio:api:json (path="*;*" OR path="*%7C*" OR path="*&&*" OR path="*whoami*" OR path="*nc%20*" OR path="*cat%20*")
+  | stats count by src_ip, path, status
+  | where count > 0

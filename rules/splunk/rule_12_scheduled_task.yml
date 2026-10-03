@@ -1,7 +1,9 @@
-﻿id: "SPL-012"
+id: "SPL-012"
 name: "MITRE ATT&CK - Suspicious Scheduled Task Created"
-description: "Detects creation of scheduled tasks executing from Temp or AppData"
+description: "Detects scheduled tasks created to run from Temp or AppData"
 severity: "medium"
+mitre: "T1053.005"
 cron_schedule: "*/5 * * * *"
 search: >
-  index=windows EventCode=4698 (TaskContent="*\\AppData\\*" OR TaskContent="*\\Temp\\*") | stats count by _time, Computer, TaskName, SubjectUserName
+  index=main sourcetype=WinEventLog:Security EventCode=4698 (Message="*\\AppData\\*" OR Message="*\\Temp\\*")
+  | stats count by _time, ComputerName, Account_Name

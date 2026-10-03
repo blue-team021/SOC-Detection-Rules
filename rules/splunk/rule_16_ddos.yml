@@ -1,0 +1,11 @@
+id: "SPL-016"
+name: "Possible DDoS / HTTP Flood Attack Detected"
+description: "Detects abnormally high request volume from a single IP in a 1-minute window"
+severity: "high"
+mitre: "T1498"
+cron_schedule: "*/5 * * * *"
+search: >
+  index=main sourcetype=bestrio:api:json
+  | bin _time span=1m
+  | stats count as request_count values(path) as requested_paths by src_ip, _time
+  | where request_count > 100

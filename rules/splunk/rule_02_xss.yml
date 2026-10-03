@@ -1,7 +1,10 @@
-﻿id: "SPL-002"
+id: "SPL-002"
 name: "OWASP - Cross-Site Scripting (XSS) Attack Detected"
-description: "Detects inline JavaScript injection in URI parameters"
+description: "Detects inline JavaScript injection in web API request paths"
 severity: "high"
+mitre: "T1059.007"
 cron_schedule: "*/5 * * * *"
 search: >
-  index=web_docker_logs (uri="*%3Cscript*" OR uri="*<script*" OR uri="*onerror=*" OR uri="*onload=*" OR uri="*javascript:*") | stats count by src_ip, uri, status | where count > 0
+  index=main sourcetype=bestrio:api:json (path="*<script*" OR path="*%3Cscript*" OR path="*onerror=*" OR path="*onload=*" OR path="*javascript:*")
+  | stats count by src_ip, path, status, user_agent
+  | where count > 0

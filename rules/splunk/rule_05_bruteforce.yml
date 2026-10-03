@@ -1,7 +1,11 @@
-﻿id: "SPL-005"
+id: "SPL-005"
 name: "OWASP - Web Authentication Brute Force"
-description: "Detects excessive 401/403 HTTP status responses from a single IP"
+description: "Detects excessive 401/403 responses from a single IP in 1 minute"
 severity: "medium"
+mitre: "T1110"
 cron_schedule: "*/5 * * * *"
 search: >
-  index=web_docker_logs status=401 OR status=403 | bucket _time span=1m | stats count by src_ip, status, _time | where count > 15
+  index=main sourcetype=bestrio:api:json (status=401 OR status=403)
+  | bucket _time span=1m
+  | stats count by src_ip, status, _time
+  | where count > 10
