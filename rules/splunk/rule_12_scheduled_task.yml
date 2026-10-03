@@ -1,6 +1,7 @@
 id: "SPL-012"
 name: "MITRE ATT&CK - Suspicious Scheduled Task Created"
 description: "Detects scheduled tasks created to run from Temp or AppData"
+description_az: "Temp ve ya AppData qovluqlarindan isleyen susulu Scheduled Task (planlasdirilmis tapsiriq) yaradilmasini askar edir (Event 4698). Hucumcu bununla sistemde qalici olur. Oncelik: orta."
 severity: "medium"
 mitre: "T1053.005"
 cron_schedule: "*/5 * * * *"

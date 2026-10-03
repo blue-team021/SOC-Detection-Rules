@@ -1,6 +1,7 @@
 id: "SPL-006"
 name: "MITRE ATT&CK - LSASS Process Memory Dump"
 description: "Detects credential dumping attempts targeting lsass.exe (requires Sysmon)"
+description_az: "LSASS prosesinin yaddasinin dump edilmesini askar edir (Mimikatz kimi aletlerle parol/hash ogurlugu). Sysmon teleb edir. Oncelik: kritik."
 severity: "critical"
 mitre: "T1003.001"
 cron_schedule: "*/5 * * * *"

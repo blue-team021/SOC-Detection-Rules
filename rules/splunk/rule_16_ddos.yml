@@ -1,6 +1,7 @@
 id: "SPL-016"
 name: "Possible DDoS / HTTP Flood Attack Detected"
 description: "Detects abnormally high request volume from a single IP in a 1-minute window"
+description_az: "DDoS / HTTP Flood hucumunu askar edir: bir IP unvanindan 1 deqiqe erzinde 100-den cox sorgu gelirse xeberdarliq verir. Meqsed: saytin cokdurulmesi. Oncelik: yuksek."
 severity: "high"
 mitre: "T1498"
 cron_schedule: "*/5 * * * *"

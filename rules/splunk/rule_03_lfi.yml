@@ -1,6 +1,7 @@
 id: "SPL-003"
 name: "OWASP - Local File Inclusion / Path Traversal"
 description: "Detects attempts to access sensitive system files via path traversal"
+description_az: "Local File Inclusion / Path Traversal hucumunu askar edir: ../, /etc/passwd, boot.ini kimi yollarla serverdeki hessas fayllara catma cehdlerini axtarir. Oncelik: yuksek."
 severity: "high"
 mitre: "T1083"
 cron_schedule: "*/5 * * * *"

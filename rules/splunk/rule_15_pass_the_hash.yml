@@ -1,6 +1,7 @@
 id: "SPL-015"
 name: "MITRE ATT&CK - Pass-the-Hash (Explicit Credentials)"
 description: "Detects Logon Type 9 (NewCredentials) indicating possible Pass-the-Hash"
+description_az: "Pass-the-Hash hucumunun mumkun isaresini askar edir: Logon Type 9 (NewCredentials) ile giris (Event 4624). Oncelik: yuksek."
 severity: "high"
 mitre: "T1550.002"
 cron_schedule: "*/5 * * * *"

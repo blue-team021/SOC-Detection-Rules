@@ -1,6 +1,7 @@
 id: "SPL-008"
 name: "MITRE ATT&CK - Security Event Log Cleared"
 description: "Detects wiping of the Windows Security event log"
+description_az: "Windows Security log jurnalinin silinmesini (Event 1102) askar edir. Hucumcu izlerini silmek ucun bunu edir. Oncelik: yuksek."
 severity: "high"
 mitre: "T1070.001"
 cron_schedule: "*/5 * * * *"

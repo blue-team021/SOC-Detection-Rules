@@ -1,6 +1,7 @@
 id: "SPL-014"
 name: "MITRE ATT&CK - Windows Defender Disabled via Registry"
 description: "Detects registry change disabling Windows Defender (requires Sysmon)"
+description_az: "Windows Defender-in reyestr deyisikliyi ile sondurulmesini askar edir. Hucumcu antivirusu sondurmeye calisir. Sysmon teleb edir. Oncelik: kritik."
 severity: "critical"
 mitre: "T1562.001"
 cron_schedule: "*/5 * * * *"

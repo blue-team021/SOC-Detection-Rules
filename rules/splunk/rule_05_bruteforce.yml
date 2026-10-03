@@ -1,6 +1,7 @@
 id: "SPL-005"
 name: "OWASP - Web Authentication Brute Force"
 description: "Detects excessive 401/403 responses from a single IP in 1 minute"
+description_az: "Veb girisde Brute Force (parol tapma) hucumunu askar edir: bir IP unvanindan 1 deqiqe erzinde cox sayda 401/403 (icaze verilmedi) cavabi gelirse xeberdarliq verir. Oncelik: orta."
 severity: "medium"
 mitre: "T1110"
 cron_schedule: "*/5 * * * *"

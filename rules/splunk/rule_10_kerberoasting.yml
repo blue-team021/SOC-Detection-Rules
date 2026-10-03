@@ -1,6 +1,7 @@
 id: "SPL-010"
 name: "MITRE ATT&CK - Potential Kerberoasting Activity"
 description: "Detects TGS service ticket requests with weak RC4 encryption (0x17)"
+description_az: "Kerberoasting hucumunu askar edir: zeif RC4 sifrelemesi (0x17) ile Kerberos xidmet bileti (TGS, Event 4769) sorgulari. Meqsed: servis hesablarinin parolunu offline tapmaq. Oncelik: yuksek."
 severity: "high"
 mitre: "T1558.003"
 cron_schedule: "*/5 * * * *"

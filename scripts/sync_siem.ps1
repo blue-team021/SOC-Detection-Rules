@@ -1,8 +1,8 @@
-# SOC-Detection-Rules -> Splunk sync (REST API) | PowerShell 5.1 uyğun
-# Işlətmək (repo qovluğunun içində):
+# SOC-Detection-Rules -> Splunk sync (REST API) | PowerShell 5.1 compatible
+# Run (inside repo folder):
 #   $env:SPLUNK_PASS = "parolun"
 #   powershell -ExecutionPolicy Bypass -File scripts\sync_siem.ps1
-# Hər rule üçün: Splunk-da id-si (SPL-001...) eyni olan alert varsa UPDATE edir, yoxdursa CREATE edir.
+# For each rule: delete old SPL-* alerts, then create new ones from rules\splunk\*.yml
 
 if (-not ("TrustAllCertsPolicy" -as [type])) {
     Add-Type @"
@@ -61,11 +61,27 @@ try {
     exit 1
 }
 
+# 2) Temiz baslangic: kohne SPL-* alertleri sil (T1136 ve diger el ile yaradilanlara toxunulmur)
+foreach ($k in @($existing.Keys)) {
+    $en = $existing[$k]
+    try {
+        Invoke-RestMethod -Uri "$Base$($en.links.alternate)" -Method Delete -Headers $Headers | Out-Null
+        Write-Host "[x] Silindi: $($en.name)" -ForegroundColor DarkYellow
+    } catch {
+        Write-Host "[-] Silinmedi: $($en.name) -> $(Get-ErrDetail $_)" -ForegroundColor Red
+    }
+}
+$existing = @{}
+Write-Host "[i] Script versiyasi: v3 (number of events + clean)" -ForegroundColor Cyan
+
 $ok = 0; $fail = 0
 
 Get-ChildItem "rules\splunk" -Filter "*.yml" | Sort-Object Name | ForEach-Object {
-    $c      = Get-Content $_.FullName -Raw
-    $id     = [regex]::Match($c, '(?m)^id:\s*"?([^"\r\n]+?)"?\s*$').Groups[1].Value
+    $c      = Get-Content $_.FullName -Raw -Encoding UTF8
+    $sev    = [regex]::Match($c, '(?m)^severity:\s*"?([^"\r\n]+?)"?\s*$').Groups[1].Value
+    $mitre  = [regex]::Match($c, '(?m)^mitre:\s*"?([^"\r\n]+?)"?\s*$').Groups[1].Value
+    $descAz = [regex]::Match($c, '(?m)^description_az:\s*"?([^"\r\n]+?)"?\s*$').Groups[1].Value
+    $id     =[regex]::Match($c, '(?m)^id:\s*"?([^"\r\n]+?)"?\s*$').Groups[1].Value
     $name   = [regex]::Match($c, '(?m)^name:\s*"?([^"\r\n]+?)"?\s*$').Groups[1].Value
     $search = [regex]::Match($c, '(?m)^search:\s*>\s*\r?\n([\s\S]+)').Groups[1].Value
     $search = ($search -replace '\s+', ' ').Trim()
@@ -81,20 +97,27 @@ Get-ChildItem "rules\splunk" -Filter "*.yml" | Sort-Object Name | ForEach-Object
 
     $body = [ordered]@{
         "search"               = $search
+        "description"          = "$descAz (MITRE: $mitre | Severity: $sev)"
         "is_scheduled"         = "1"
-        "cron_schedule"        = "*/5 * * * *"
-        "dispatch.earliest_time" = "-15m"
+        "cron_schedule"        = "* * * * *"
+        "dispatch.earliest_time" = "-2m"
         "dispatch.latest_time" = "now"
         "alert_type"           = "number of events"
         "alert_comparator"     = "greater than"
         "alert_threshold"      = "0"
         "alert.track"          = "1"
         "alert.suppress"       = "1"
-        "alert.suppress.period" = "3600s"
+        "alert.suppress.period" = "300s"
         "actions"              = "email"
         "action.email.to"      = $Email
         "action.email.subject" = "Splunk Alert: $full"
         "action.email.sendresults" = "1"
+        "action.email.message.alert" = ('Diqqet! Sistemde tehlukesizlik qaydasi pozuldu ve hucum askar edildi.' + "`n`n" +
+            'Qayda: $name$' + "`n" +
+            'Tehlukesizlik seviyyesi: ' + $sev + "`n" +
+            'MITRE ATT&CK: ' + $mitre + "`n" +
+            'Hadise sayi: $job.resultCount$' + "`n`n" +
+            'Tecili olaraq Splunk panelini yoxlayin.')
     }
 
     try {

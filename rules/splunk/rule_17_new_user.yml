@@ -1,6 +1,7 @@
 id: "SPL-017"
 name: "New User Account Created (Honeytoken Watch)"
 description: "Detects creation of a new domain/local user account (e.g. honeytoken sqladmin)"
+description_az: "Yeni istifadeci hesabinin yaradilmasini askar edir (Event 4720), xususile sqladmin honeytoken hesabini izleyir. Hucumcu gizli hesab yarada biler. Oncelik: yuksek."
 severity: "high"
 mitre: "T1136.001"
 cron_schedule: "*/5 * * * *"

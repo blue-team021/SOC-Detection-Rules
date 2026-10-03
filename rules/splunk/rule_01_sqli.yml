@@ -1,6 +1,7 @@
 id: "SPL-001"
 name: "OWASP - SQL Injection (SQLi) Attempt Detected"
 description: "Detects SQL injection patterns in web API request paths"
+description_az: "Veb API sorgularinda SQL Injection (SQLi) hucumu cehdini askar edir: UNION, SELECT, 1=1, SLEEP( ve tirnaq isareleri kimi nusuneleri axtarir. Meqsed: hucumcu verilenler bazasini oga ve ya oxumaga calisir. Oncelik: yuksek."
 severity: "high"
 mitre: "T1190"
 cron_schedule: "*/5 * * * *"

@@ -1,6 +1,7 @@
 id: "SPL-004"
 name: "OWASP - Command Injection Attempt"
 description: "Detects OS command execution characters/keywords in web requests"
+description_az: "Command Injection (emr yeritme) cehdini askar edir: sorgularda ; | && ` $( ve whoami, cat, wget, curl kimi emrleri axtarir. Meqsed: hucumcu serverde oz emrlerini isletmek isteyir. Oncelik: kritik."
 severity: "critical"
 mitre: "T1059"
 cron_schedule: "*/5 * * * *"

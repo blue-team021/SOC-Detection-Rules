@@ -1,6 +1,7 @@
 id: "SPL-002"
 name: "OWASP - Cross-Site Scripting (XSS) Attack Detected"
 description: "Detects inline JavaScript injection in web API request paths"
+description_az: "Veb API sorgularinda XSS (Cross-Site Scripting) hucumunu askar edir: <script>, onerror=, javascript: kimi JavaScript yeritme cehdlerini axtarir. Meqsed: istifadecinin brauzerinde zererli kod islemek. Oncelik: yuksek."
 severity: "high"
 mitre: "T1059.007"
 cron_schedule: "*/5 * * * *"

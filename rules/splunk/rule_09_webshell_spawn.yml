@@ -1,6 +1,7 @@
 id: "SPL-009"
 name: "MITRE ATT&CK - Web Server Spawning Shell"
 description: "Detects a web server process spawning a command shell (requires Sysmon)"
+description_az: "Veb server prosesinin (w3wp, nginx, httpd, php ve s.) cmd/powershell/bash acmasini askar edir; bu, Web Shell isaresidir. Sysmon teleb edir. Oncelik: kritik."
 severity: "critical"
 mitre: "T1505.003"
 cron_schedule: "*/5 * * * *"

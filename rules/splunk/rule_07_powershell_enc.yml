@@ -1,6 +1,7 @@
 id: "SPL-007"
 name: "MITRE ATT&CK - Encoded PowerShell Execution"
 description: "Detects Base64/encoded PowerShell via process creation (4688, needs command-line auditing GPO)"
+description_az: "Kodlasdirilmis (Base64) PowerShell emrinin isledilmesini askar edir; zererli proqramlar emri gizlemek ucun bunu istifade edir. Process creation (4688) ve command-line audit GPO teleb edir. Oncelik: yuksek."
 severity: "high"
 mitre: "T1059.001"
 cron_schedule: "*/5 * * * *"
