@@ -1,0 +1,17 @@
+name: "SPL-016 - Possible DDoS / HTTP Flood Attack Detected"
+description: "Detects abnormally high number of HTTP requests from a single IP address within a 1-minute window, indicating a possible Layer 7 DDoS or HTTP Flood attack."
+type: "Alert"
+platform: "Splunk"
+query: >
+  index="sizin_index_adiniz" sourcetype="access_combined"
+  | bin _time span=1m
+  | stats count as request_count values(uri) as requested_urls by clientip, _time
+  | where request_count > 500
+  | sort - request_count
+cron_schedule: "* * * * *"
+earliest_time: "-1m"
+latest_time: "now"
+trigger_condition: "count > 0"
+severity: "High"
+actions:
+  - add_to_triggered_alerts
