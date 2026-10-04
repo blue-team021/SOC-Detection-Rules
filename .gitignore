@@ -6,3 +6,5 @@ secrets*
 qr_export.zip
 *ContentExport*.zip
 build/
+# Hesabat sekilleri (lokal, GitHub-a getmir)
+report/
