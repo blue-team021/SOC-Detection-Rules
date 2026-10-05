@@ -48,13 +48,14 @@ Write-Host "`n>>> Splunk-a '$User' kimi qosulurum ($SplunkHost)...`n" -Foregroun
 
 # 1) Splunk-da movcud alert-leri oxu: id (SPL-001) -> {ad, link}
 $existing = @{}
+$oldList  = @()   # butun kohne SPL-* alertler (dublikatlar da daxil), yalniz bu istifadecinin
 try {
     $list = Invoke-RestMethod -Uri "${Uri}?output_mode=json&count=0" -Method Get -Headers $Headers
     foreach ($en in $list.entry) {
         $m = [regex]::Match($en.name, '^(SPL-\d+)')
-        if ($m.Success) { $existing[$m.Groups[1].Value] = $en }
+        if ($m.Success -and $en.author -eq $User) { $oldList += $en }
     }
-    Write-Host "[i] Splunk-da movcud SPL alert sayi: $($existing.Count)" -ForegroundColor Cyan
+    Write-Host "[i] Splunk-da movcud SPL alert sayi (dublikatlar daxil): $($oldList.Count)" -ForegroundColor Cyan
 } catch {
     Write-Host "[-] Splunk-a qosulmaq/oxumaq alinmadi:" -ForegroundColor Red
     Write-Host "    $(Get-ErrDetail $_)" -ForegroundColor DarkGray
@@ -62,8 +63,7 @@ try {
 }
 
 # 2) Temiz baslangic: kohne SPL-* alertleri sil (T1136 ve diger el ile yaradilanlara toxunulmur)
-foreach ($k in @($existing.Keys)) {
-    $en = $existing[$k]
+foreach ($en in $oldList) {
     try {
         Invoke-RestMethod -Uri "$Base$($en.links.alternate)" -Method Delete -Headers $Headers | Out-Null
         Write-Host "[x] Silindi: $($en.name)" -ForegroundColor DarkYellow
@@ -72,7 +72,7 @@ foreach ($k in @($existing.Keys)) {
     }
 }
 $existing = @{}
-Write-Host "[i] Script versiyasi: v3 (number of events + clean)" -ForegroundColor Cyan
+Write-Host "[i] Script versiyasi: v4 (dublikat temizleme)" -ForegroundColor Cyan
 
 $ok = 0; $fail = 0
 

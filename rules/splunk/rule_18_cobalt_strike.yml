@@ -1,0 +1,18 @@
+id: "SPL-018"
+name: "MITRE ATT&CK - Cobalt Strike Beacon Behavior"
+description: "Detects Cobalt Strike beacon behavior via Sysmon: default named pipes (Event 17/18), remote thread injection (Event 8), rundll32 without arguments (Event 1) and LSASS access (Event 10)"
+description_az: "Cobalt Strike beacon davranisini Sysmon ile askar edir: standart pipe adlari (MSSE-*-server, msagent_, postex_, status_ - Event 17/18), basqa prosese uzaqdan thread yeridilmesi (Event 8), argumentsiz rundll32 (beacon spawnto - Event 1) ve LSASS yaddasina giris (Event 10). Sysmon teleb edir. Oncelik: kritik."
+severity: "critical"
+mitre: "T1055 T1218.011 T1003.001 T1570"
+cron_schedule: "*/5 * * * *"
+search: >
+  index=main sourcetype="WinEventLog:Microsoft-Windows-Sysmon/Operational"
+  (
+    ((EventCode=17 OR EventCode=18) (PipeName="\\MSSE-*-server" OR PipeName="\\msagent_*" OR PipeName="\\postex_*" OR PipeName="\\status_*"))
+    OR (EventCode=8 (TargetImage="*\\rundll32.exe" OR TargetImage="*\\dllhost.exe" OR TargetImage="*\\svchost.exe" OR TargetImage="*\\explorer.exe" OR TargetImage="*\\notepad.exe") NOT (SourceImage="C:\\Windows\\System32\\*" OR SourceImage="C:\\Program Files*"))
+    OR (EventCode=1 Image="*\\rundll32.exe" (CommandLine="*rundll32.exe" OR CommandLine="*rundll32.exe\""))
+    OR (EventCode=10 TargetImage="*\\lsass.exe" (GrantedAccess="0x1010" OR GrantedAccess="0x1410" OR GrantedAccess="0x1fffff") NOT (SourceImage="*\\MsMpEng.exe" OR SourceImage="*\\wininit.exe" OR SourceImage="*\\csrss.exe" OR SourceImage="*\\svchost.exe"))
+  )
+  | eval detection=case(EventCode=17 OR EventCode=18, "CS standart named pipe", EventCode=8, "Remote thread injection (Event 8)", EventCode=1, "Argumentsiz rundll32 (spawnto)", EventCode=10, "LSASS yaddasina giris (Event 10)")
+  | eval source_proc=coalesce(SourceImage, Image), target=coalesce(TargetImage, PipeName, CommandLine)
+  | stats count min(_time) as firstTime max(_time) as lastTime values(detection) as detection by Computer, source_proc, target
