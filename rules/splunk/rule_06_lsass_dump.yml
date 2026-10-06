@@ -7,4 +7,5 @@ mitre: "T1003.001"
 cron_schedule: "*/5 * * * *"
 search: >
   index=main sourcetype="WinEventLog:Microsoft-Windows-Sysmon/Operational" EventCode=10 TargetImage="*\\lsass.exe" (GrantedAccess="0x1010" OR GrantedAccess="0x1410" OR GrantedAccess="0x143a")
+  | eval Computer=coalesce(Computer, ComputerName, host)
   | stats count by _time, Computer, SourceImage, TargetImage, GrantedAccess

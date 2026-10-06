@@ -7,4 +7,5 @@ mitre: "T1562.001"
 cron_schedule: "*/5 * * * *"
 search: >
   index=main sourcetype="WinEventLog:Microsoft-Windows-Sysmon/Operational" EventCode=13 TargetObject="*\\DisableAntiSpyware" Details="DWORD (0x00000001)"
+  | eval Computer=coalesce(Computer, ComputerName, host)
   | stats count by _time, Computer, Image, TargetObject

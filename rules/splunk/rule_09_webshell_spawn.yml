@@ -7,4 +7,5 @@ mitre: "T1505.003"
 cron_schedule: "*/5 * * * *"
 search: >
   index=main sourcetype="WinEventLog:Microsoft-Windows-Sysmon/Operational" EventCode=1 (ParentImage="*\\w3wp.exe" OR ParentImage="*\\nginx.exe" OR ParentImage="*\\httpd.exe") (Image="*\\cmd.exe" OR Image="*\\powershell.exe")
+  | eval Computer=coalesce(Computer, ComputerName, host)
   | stats count by _time, Computer, ParentImage, Image

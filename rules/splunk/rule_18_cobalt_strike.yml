@@ -15,4 +15,5 @@ search: >
   )
   | eval detection=case(EventCode=17 OR EventCode=18, "CS standart named pipe", EventCode=8, "Remote thread injection (Event 8)", EventCode=1, "Argumentsiz rundll32 (spawnto)", EventCode=10, "LSASS yaddasina giris (Event 10)")
   | eval source_proc=coalesce(SourceImage, Image), target=coalesce(TargetImage, PipeName, CommandLine)
+  | eval Computer=coalesce(Computer, ComputerName, host)
   | stats count min(_time) as firstTime max(_time) as lastTime values(detection) as detection by Computer, source_proc, target
