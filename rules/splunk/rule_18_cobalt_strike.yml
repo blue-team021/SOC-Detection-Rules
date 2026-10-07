@@ -9,7 +9,7 @@ search: >
   index=main sourcetype="WinEventLog:Microsoft-Windows-Sysmon/Operational"
   (
     ((EventCode=17 OR EventCode=18) (PipeName="\\MSSE-*-server" OR PipeName="\\msagent_*" OR PipeName="\\postex_*" OR PipeName="\\status_*"))
-    OR (EventCode=8 (TargetImage="*\\rundll32.exe" OR TargetImage="*\\dllhost.exe" OR TargetImage="*\\svchost.exe" OR TargetImage="*\\explorer.exe" OR TargetImage="*\\notepad.exe") NOT (SourceImage="C:\\Windows\\System32\\*" OR SourceImage="C:\\Program Files*"))
+    OR (EventCode=8 ((TargetImage="*\\rundll32.exe" OR TargetImage="*\\dllhost.exe" OR TargetImage="*\\svchost.exe" OR TargetImage="*\\explorer.exe" OR TargetImage="*\\notepad.exe" OR TargetImage="*\\csrss.exe" OR TargetImage="*\\lsass.exe" OR TargetImage="*\\winlogon.exe" OR TargetImage="*\\services.exe" OR TargetImage="*\\wininit.exe" OR TargetImage="*\\smss.exe") OR (SourceImage="*\\Downloads\\*" OR SourceImage="*\\AppData\\*" OR SourceImage="*\\Temp\\*" OR SourceImage="*\\Users\\Public\\*")) NOT (SourceImage="C:\\Windows\\System32\\*" OR SourceImage="C:\\Program Files*"))
     OR (EventCode=1 Image="*\\rundll32.exe" (CommandLine="*rundll32.exe" OR CommandLine="*rundll32.exe\""))
     OR (EventCode=10 TargetImage="*\\lsass.exe" (GrantedAccess="0x1010" OR GrantedAccess="0x1410" OR GrantedAccess="0x1fffff") NOT (SourceImage="*\\MsMpEng.exe" OR SourceImage="*\\wininit.exe" OR SourceImage="*\\csrss.exe" OR SourceImage="*\\svchost.exe"))
   )
