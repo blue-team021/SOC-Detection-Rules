@@ -1,0 +1,12 @@
+id: "SPL-019"
+name: "GravityZone XDR - Threat Blocked or Quarantined"
+description: "Alerts when Bitdefender GravityZone XDR blocks, quarantines or detects a threat (index=xdr). Fills the gap where XDR blocks an attack so fast that Sysmon-based rules do not fire - SOC still gets notified."
+description_az: "Bitdefender GravityZone XDR bir tehdidi bloklayanda / karantine alanda / askarlayanda alert verir (index=xdr: module=quarantine/av/incident). Bu, XDR cox tez bloklayib Sysmon qaydalari ise dusmeyen halda (mes. advanced_inject.exe 1 saniyede olduruldu) SOC-un yene de xeberdar olmasi ucundur. Menbe: GravityZone -> gz_xdr_poller -> Splunk index=xdr. Oncelik: kritik."
+severity: "critical"
+mitre: "XDR-detection"
+cron_schedule: "*/5 * * * *"
+search: >
+  index=xdr sourcetype=bitdefender:gravityzone (module=quarantine OR module=av OR module=incident)
+  | eval host_name=coalesce(endpointName, name, host)
+  | eval file=coalesce('details.filePath', filePath, path)
+  | stats count min(_time) as firstTime max(_time) as lastTime values(module) as modules values(file) as files by host_name
